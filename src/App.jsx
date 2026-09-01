@@ -54,7 +54,8 @@ function App() {
             schedule: {
               date: newDate,
               time: newTime
-            }
+            },
+            notified: false
 
           }
           : todo
@@ -99,6 +100,7 @@ function App() {
         date: date,
         time: time
       },
+      notified: false,
       completed: false
     };
     setTodos([...todos, todo])
@@ -117,6 +119,72 @@ function App() {
   useEffect(() => {
     localStorage.setItem("todos", JSON.stringify(todos))
   }, [todos])
+
+  // useEffect for notification 
+  useEffect(() => {
+    if ("Notification" in window && Notification.permission === "default") {
+      Notification.requestPermission();
+    }
+  }, []);
+
+  useEffect(() => {
+  if (!("Notification" in window)) return;
+  if (Notification.permission !== "granted") return;
+
+  const timers = [];
+
+  todos.forEach((todo) => {
+    if (todo.completed || todo.notified) return;
+
+    const scheduledTime = new Date(
+      `${todo.schedule.date}T${todo.schedule.time}:00`
+    );
+
+    const delay = scheduledTime.getTime() - Date.now();
+
+    if (delay <= 0) {
+      new Notification(`Todo Reminder: ${todo.title}`, {
+        body: todo.desc,
+        icon: "/favicon.png"
+      });
+
+      setTodos((currentTodos) =>
+        currentTodos.map((currentTodo) =>
+          currentTodo.sno === todo.sno
+            ? { ...currentTodo, notified: true }
+            : currentTodo
+        )
+      );
+
+    } else {
+      const timer = setTimeout(() => {
+
+        new Notification(`Todo Reminder: ${todo.title}`, {
+          body: todo.desc,
+          icon: "/favicon.png"
+        });
+
+        setTodos((currentTodos) =>
+          currentTodos.map((currentTodo) =>
+            currentTodo.sno === todo.sno
+              ? { ...currentTodo, notified: true }
+              : currentTodo
+          )
+        );
+
+      }, delay);
+
+      timers.push(timer);
+    }
+  });
+
+  return () => {
+    timers.forEach((timer) => clearTimeout(timer));
+  };
+
+}, [todos]);
+
+
 
   return (
     <>
