@@ -122,68 +122,93 @@ function App() {
 
   // useEffect for notification 
   useEffect(() => {
-    if ("Notification" in window && Notification.permission === "default") {
-      Notification.requestPermission();
+    try {
+      if (
+        typeof window !== "undefined" &&
+        "Notification" in window &&
+        Notification.permission === "default"
+      ) {
+        Notification.requestPermission().catch(() => { });
+      }
+    } catch (error) {
+      console.log("Notification permission error:", error);
     }
   }, []);
 
   useEffect(() => {
-  if (!("Notification" in window)) return;
-  if (Notification.permission !== "granted") return;
+    try {
+      if (
+        typeof window === "undefined" ||
+        !("Notification" in window)
+      ) {
+        return;
+      }
 
-  const timers = [];
+      if (Notification.permission !== "granted") {
+        return;
+      }
 
-  todos.forEach((todo) => {
-    if (todo.completed || todo.notified) return;
+      const timers = [];
 
-    const scheduledTime = new Date(
-      `${todo.schedule.date}T${todo.schedule.time}:00`
-    );
+      todos.forEach((todo) => {
+        try {
+          if (
+            !todo ||
+            todo.completed ||
+            todo.notified ||
+            !todo.schedule?.date ||
+            !todo.schedule?.time
+          ) {
+            return;
+          }
 
-    const delay = scheduledTime.getTime() - Date.now();
+          const scheduledTime = new Date(
+            `${todo.schedule.date}T${todo.schedule.time}:00`
+          );
 
-    if (delay <= 0) {
-      new Notification(`Todo Reminder: ${todo.title}`, {
-        body: todo.desc,
-        icon: "/favicon.png"
+          if (isNaN(scheduledTime.getTime())) {
+            return;
+          }
+
+          const delay = scheduledTime.getTime() - Date.now();
+
+          const showNotification = () => {
+            try {
+              new Notification(`Todo Reminder: ${todo.title}`, {
+                body: todo.desc || "",
+                icon: "/favicon.png"
+              });
+
+              setTodos((currentTodos) =>
+                currentTodos.map((currentTodo) =>
+                  currentTodo.sno === todo.sno
+                    ? { ...currentTodo, notified: true }
+                    : currentTodo
+                )
+              );
+            } catch (error) {
+              console.log("Notification failed:", error);
+            }
+          };
+
+          if (delay <= 0) {
+            showNotification();
+          } else {
+            const timer = setTimeout(showNotification, delay);
+            timers.push(timer);
+          }
+        } catch (error) {
+          console.log("Todo notification check failed:", error);
+        }
       });
 
-      setTodos((currentTodos) =>
-        currentTodos.map((currentTodo) =>
-          currentTodo.sno === todo.sno
-            ? { ...currentTodo, notified: true }
-            : currentTodo
-        )
-      );
-
-    } else {
-      const timer = setTimeout(() => {
-
-        new Notification(`Todo Reminder: ${todo.title}`, {
-          body: todo.desc,
-          icon: "/favicon.png"
-        });
-
-        setTodos((currentTodos) =>
-          currentTodos.map((currentTodo) =>
-            currentTodo.sno === todo.sno
-              ? { ...currentTodo, notified: true }
-              : currentTodo
-          )
-        );
-
-      }, delay);
-
-      timers.push(timer);
+      return () => {
+        timers.forEach((timer) => clearTimeout(timer));
+      };
+    } catch (error) {
+      console.log("Notification system error:", error);
     }
-  });
-
-  return () => {
-    timers.forEach((timer) => clearTimeout(timer));
-  };
-
-}, [todos]);
-
+  }, [todos]);
 
 
   return (
