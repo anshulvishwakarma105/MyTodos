@@ -5,7 +5,7 @@ export default function AddTodo({ onSave, onClose }) {
 
     const minTime = new Date().toTimeString().slice(0, 5);
     const defaultDate = new Date().toLocaleDateString("en-CA");
-    const defaultTime = new Date(Date.now() + 5 * 60000).toTimeString().slice(0, 5);
+    const defaultTime = new Date(Date.now() + 1 * 60000).toTimeString().slice(0, 5);
 
     const [title, setTitle] = useState("")
     const [desc, setDesc] = useState("")

@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 export default function EditTodo({ todo, onClose, onSave }) {
     const minDate = new Date().toLocaleDateString("en-CA");
-    const minTime = new Date(Date.now() + 5 * 60000).toTimeString().slice(0, 5);
+    const minTime = new Date(Date.now() + 1 * 60000).toTimeString().slice(0, 5);
 
     const [newTitle, setNewTitle] = useState(todo.title)
     const [newDesc, setNewDesc] = useState(todo.desc)
@@ -27,7 +27,7 @@ export default function EditTodo({ todo, onClose, onSave }) {
             return;
         }
 
-        onSave(todo.sno, newTitle, newDesc, newTime, newDate)
+        onSave(todo.sno, newTitle, newDesc, newDate, newTime)
     }
 
     return (

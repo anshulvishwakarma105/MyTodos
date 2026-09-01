@@ -89,7 +89,7 @@ export default function TodoItem(props) {
                         className="pe-3 d-flex flex-column flex-md-row justify-content-center align-items-center mb-auto mb-md-0"
                         style={{ fontSize: "14px" }}
                     >
-                        <button type="button" className="btn btn-info btn-sm border-0 text-light px-4  me-2 " onClick={() => setShowSchedule(prev => !prev)}>
+                        <button type="button" className="btn btn-info btn-sm border-0 text-light px-2  me-lg-2 " onClick={() => setShowSchedule(prev => !prev)}>
                             <i className="bi bi-calendar3 me-2"></i>
                             {showSchedule ? "Hide" : "Show"} Schedule
                             <i className={`bi ms-2 ${showSchedule ? "bi-chevron-up" : "bi-chevron-down"}`}></i>

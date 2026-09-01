@@ -1,8 +1,10 @@
 ## Introduction
-A simple user friendly Todo App that can operate CRUD(create, read, update, delete) operations and stores data in localStorage, has a user-friendly ui/ux.
-It does not stores any data on clould ,
-It does not use cookies,
-Simple Realiable & Privacy Concernd.
+
+A simple, user-friendly Todo App that supports CRUD (Create, Read, Update, and Delete) operations and stores data in the browser's localStorage. It features a clean and user-friendly UI/UX.
+
+* It does not store any data in the cloud.
+* It does not use cookies.
+* Simple, reliable, and privacy-focused.
 
 ## Pre-Requirements
 Node Js
@@ -21,10 +23,38 @@ GitHub (*optional)
 >> npm run build  //build
 >> npm run preview   //build preview
 
+
+## Screenshots
+
+### About Todo
+
+![About Todo](./screenshorts/aboutTodo.png)
+
+### Add Todo
+
+![Add Todo](./screenshorts/addTodo.png)
+
+### Delete Todo
+
+![Delete Todo](./screenshorts/deleteTodo.png)
+
+### Edit Todo
+
+![Edit Todo](./screenshorts/editTodo.png)
+
+### Notification Todo
+
+![Notification Todo](./screenshorts/notificationTodo.png)
+
+### Search Todo
+
+![Search Todo](./screenshorts/searchTodo.png)
+
+
 ## Uploading GitHut
 //Create a New Repo for this project (*recommended)
 >> git init
->> git remote <https://github.com/User_name/repo_name.git
+>> git remote add origin https://github.com/anshulvishwakarma105/MyTodos.git
 >> git remote -v
 >> git add .
 >> git commit -m "Initial Commit"
