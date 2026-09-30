@@ -2,7 +2,7 @@ import React from 'react'
 
 export default function About() {
     return (
-        <div className="container my-5">
+        <div className="container mb-4">
             <div className="card shadow-sm border-0">
                 <div className="card-body p-4 p-md-5">
                     <div className="text-center mb-4">

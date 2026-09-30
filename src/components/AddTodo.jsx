@@ -1,24 +1,28 @@
 
 import React, { useState } from 'react'
+import { getCurrentDate, getCurrentTime } from './Calculation';
 
-export default function AddTodo({ onSave, onClose }) {
+export default function AddTodo({ onSave, onClose, onAlert }) {
 
-    const minTime = new Date().toTimeString().slice(0, 5);
-    const defaultDate = new Date().toLocaleDateString("en-CA");
-    const defaultTime = new Date(Date.now() + 1 * 60000).toTimeString().slice(0, 5);
+    const minDate = getCurrentDate();
+    const minTime = getCurrentTime();
 
     const [title, setTitle] = useState("")
     const [desc, setDesc] = useState("")
-    const [date, setDate] = useState(defaultDate)
-    const [time, setTime] = useState(defaultTime)
+    const [date, setDate] = useState(minDate)
+    const [time, setTime] = useState(minTime)
 
     const handleSubmit = (e) => {
         e.preventDefault()
 
-        if (!title || !desc) {
-            return alert("title and desc cannot be empty")
+        if (!title.trim() || !desc.trim()) {
+            onAlert({
+                type: 'warning',
+                message: "title and desc cannot be empty",
+                icon: 'exclamation-triangle-fill'
+            })
+            return
         }
-
         onSave(title, desc, date, time)
         setTitle("")
         setDesc("")
@@ -37,9 +41,7 @@ export default function AddTodo({ onSave, onClose }) {
                 style={{ maxWidth: "24rem" }}
             >
                 <div className="card-body p-4">
-
                     <form onSubmit={handleSubmit}>
-
                         <div className="d-flex align-items-center justify-content-between mb-4">
                             <div className="d-flex align-items-center gap-2">
                                 <div
@@ -51,7 +53,6 @@ export default function AddTodo({ onSave, onClose }) {
                                 >
                                     <i className="bi bi-plus-lg fs-5"></i>
                                 </div>
-
                                 <div>
                                     <h3 className="mb-0 fw-semibold">
                                         Add Todo
@@ -61,7 +62,6 @@ export default function AddTodo({ onSave, onClose }) {
                                     </small>
                                 </div>
                             </div>
-
                             <button
                                 type="button"
                                 className="btn btn-sm btn-light rounded-circle d-flex align-items-center justify-content-center"
@@ -75,7 +75,6 @@ export default function AddTodo({ onSave, onClose }) {
                                 <i className="bi bi-x-lg"></i>
                             </button>
                         </div>
-
                         <div className="mb-3">
                             <label
                                 htmlFor="title"
@@ -83,12 +82,10 @@ export default function AddTodo({ onSave, onClose }) {
                             >
                                 Todo Title
                             </label>
-
                             <div className="input-group">
                                 <span className="input-group-text bg-light border-end-0">
                                     <i className="bi bi-card-heading text-secondary"></i>
                                 </span>
-
                                 <input
                                     type="text"
                                     value={title}
@@ -99,8 +96,6 @@ export default function AddTodo({ onSave, onClose }) {
                                 />
                             </div>
                         </div>
-
-                        {/* Description */}
                         <div className="mb-3">
                             <label
                                 htmlFor="desc"
@@ -108,7 +103,6 @@ export default function AddTodo({ onSave, onClose }) {
                             >
                                 Todo Description
                             </label>
-
                             <div className="input-group">
                                 <span className="input-group-text bg-light border-end-0 align-items-start pt-2">
                                     <i className="bi bi-text-paragraph text-secondary"></i>
@@ -121,6 +115,10 @@ export default function AddTodo({ onSave, onClose }) {
                                     id="desc"
                                     placeholder="Enter todo description"
                                     rows="2"
+                                    style={{
+                                        minHeight: "75px",
+                                        maxHeight: "75px"
+                                    }}
                                 ></textarea>
                             </div>
                         </div>
@@ -131,7 +129,6 @@ export default function AddTodo({ onSave, onClose }) {
                             >
                                 Todo Date
                             </label>
-
                             <div className="input-group">
                                 <span className="input-group-text bg-light border-end-0">
                                     <i className="bi bi-calendar3 text-secondary"></i>
@@ -140,7 +137,7 @@ export default function AddTodo({ onSave, onClose }) {
                                 <input
                                     type="date"
                                     value={date}
-                                    min={defaultDate}
+                                    min={minDate}
                                     onChange={(e) => setDate(e.target.value)}
                                     className="form-control border-start-0"
                                     id="date"
@@ -154,47 +151,29 @@ export default function AddTodo({ onSave, onClose }) {
                             >
                                 Todo Time
                             </label>
-
                             <div className="input-group">
                                 <span className="input-group-text bg-light border-end-0">
                                     <i className="bi bi-clock text-secondary"></i>
                                 </span>
-
                                 <input
                                     type="time"
                                     value={time}
-                                    min={date === defaultDate ? minTime : "00:00"}
+                                    min={date === minDate ? minTime : "00:00"}
                                     onChange={(e) => setTime(e.target.value)}
                                     className="form-control border-start-0"
                                     id="time"
                                 />
                             </div>
 
-                            <div className="form-text small">
-                                Select when you want to complete this todo.
-                            </div>
                         </div>
-
-                        <div className="d-flex gap-2">
-
-                            <button
-                                type="submit"
-                                className="btn btn-primary flex-grow-1 d-flex align-items-center justify-content-center gap-2"
-                            >
-                                <i className="bi bi-plus-lg"></i>
-                                Add Todo
-                            </button>
-
-                            <button
-                                type="button"
-                                className="btn btn-outline-secondary px-3"
-                                onClick={onClose}
-                            >
-                                Cancel
-                            </button>
-
-                        </div>
-
+                        <button
+                            type="submit"
+                            className="btn btn-primary w-100 flex-grow-1 d-flex 
+                            align-items-center justify-content-center gap-2"
+                        >
+                            <i className="bi bi-plus-lg"></i>
+                            Add Todo
+                        </button>
                     </form>
 
                 </div>

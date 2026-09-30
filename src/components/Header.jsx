@@ -1,21 +1,27 @@
 import React from 'react'
 
-export default function Header({ onAdd, search, setSearch }) {
+export default function Header({search, onSearch, onAlert, onAdd}) {
 
     const handleSearchSubmit = (e) => {
         e.preventDefault();
 
         if (!search.trim()) {
-            alert("Search input cannot be Empty")
+            onAlert({
+                type: 'warning',
+                message: "Search input cannot be Empty",
+                icon: 'exclamation-triangle-fill'
+            });
         } else {
-            setSearch("");
+            onSearch("");
         }
     }
 
     return (
-        <div className="container-fluid py-3 px-3">
-            <div className="d-flex align-items-center justify-content-between gap-3">
-
+            <div 
+            className="container-fluid py-3 px-3 d-flex align-items-center justify-content-between gap-3"
+            style={{
+                maxWidth:"1000px"
+            }}>
                 <form
                     className="d-flex flex-grow-1"
                     role="search"
@@ -27,12 +33,12 @@ export default function Header({ onAdd, search, setSearch }) {
                         </span>
 
                         <input
-                            className="form-control"
+                            className="form-control py-2"
                             type="search"
                             value={search}
                             placeholder="Search todos..."
                             aria-label="Search"
-                            onChange={(e) => setSearch(e.target.value)}
+                            onChange={(e) => onSearch(e.target.value)}
                         />
                     </div>
                 </form>
@@ -40,14 +46,12 @@ export default function Header({ onAdd, search, setSearch }) {
                 <button
                     type="button"
                     className="btn btn-primary text-nowrap d-flex align-items-center gap-1 px-3"
-                    onClick={onAdd}
+                    onClick={()=>{onAdd(true)}}
                 >
                     <i className="bi bi-plus-lg"></i>
                     Add Todo
                 </button>
 
             </div>
-            
-        </div>
     )
 }

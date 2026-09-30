@@ -1,15 +1,17 @@
-import React from 'react'
+import React, { useState } from 'react'
 import TodoItem from './TodoItem'
 
-export default function Todos({ onSearch, todos, onDelete, onEdit, onDone }) {
-    const MyStyle = {
-        minHeight: "50vh",
-    }
+export default function Todos({ todos, onEdit, onDone, onDelete,onConfirm, onSearch }) {
+    const [operation, setOperation] = useState(false)
 
     const displayTodos = onSearch ? onSearch : todos;
 
     return (
-        <div className="container pb-3 my-4" style={MyStyle}>
+        <div className="container pb-3 my-4" style={{
+            minHeight: "50vh",
+            maxWidth: "800px"
+        }}
+        >
             <div className="d-flex align-items-center justify-content-between mb-4">
                 <h3 className="mb-0 fw-semibold">
                     <i className="bi bi-list-check me-2 text-primary"></i>
@@ -27,9 +29,12 @@ export default function Todos({ onSearch, todos, onDelete, onEdit, onDone }) {
                         key={todo.sno}
                         index={index}
                         todo={todo}
-                        onDelete={() => onDelete(todo)}
                         onEdit={onEdit}
                         onDone={onDone}
+                        onDelete={onDelete}
+                        onConfirm={onConfirm}
+                        operation={operation}
+                        onOperation={setOperation}
                     />
                 ))
             ) : (
