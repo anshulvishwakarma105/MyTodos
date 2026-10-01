@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router'
 
-function Navbar() {
+export default function Navbar() {
   const navlinks = [
     {
       name: "Home",
@@ -13,7 +13,8 @@ function Navbar() {
   return (
     <nav className="navbar navbar-expand-md bg-primary" data-bs-theme="dark">
       <div className="container-fluid px-md-5">
-        <NavLink to="/" className="navbar-brand fw-bold align-middle" >
+        <NavLink to="/" className="navbar-brand fw-bold align-middle " >
+        <i className="bi bi-ui-checks-grid me-2"></i>
           <span> Todos App</span></NavLink>
         <button
           className="navbar-toggler"
@@ -67,18 +68,3 @@ function Navbar() {
     </nav >
   )
 }
-
-function Footer() {
-  return (
-    <footer className="bg-primary text-light py-2 fixed-bottom text-center shadow-sm">
-      <p className="mb-0 small d-flex align-items-center justify-content-center gap-1">
-        <i className="bi bi-check2-square"></i>
-        <span>
-          Copyright &copy; MyTodos.com
-        </span>
-      </p>
-    </footer>
-  )
-}
-
-export { Navbar, Footer }

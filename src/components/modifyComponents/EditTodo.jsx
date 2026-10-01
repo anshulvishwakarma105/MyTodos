@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { getCurrentDate, getCurrentTime } from './Calculation';
+import { getCurrentDate, getCurrentTime } from '../Calculation';
 
 export default function EditTodo({ todo, onSave, onClose, onAlert }) {
     const minDate = getCurrentDate;
@@ -20,7 +20,7 @@ export default function EditTodo({ todo, onSave, onClose, onAlert }) {
             });
             return
         }
-        onSave(todo.sno, newTitle, newDesc, newDate, newTime)
+        onSave(todo.sno, newTitle.trim(), newDesc.trim(), newDate, newTime)
     }
     const handleReset = () => {
         setNewTitle(todo.title);

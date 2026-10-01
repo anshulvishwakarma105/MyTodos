@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react'
-import Header from '../components/Header'
-import Todos from '../components/Todos'
-import AddTodo from '../components/AddTodo'
-import EditTodo from '../components/EditTodo'
+import React, { useState, useEffect, useReducer } from 'react'
+import Header from '../components/uiComponents/Header'
+import Todos from '../components/uiComponents/Todos'
+import AddTodo from '../components/modifyComponents/AddTodo'
+import EditTodo from '../components/modifyComponents/EditTodo'
 import { Alert, Confirm } from '../components/Popups'
+import { PageTitle } from '../components/Calculation'
+import { todoReducer } from '../reducer/reducer'
 
 export default function Todo() {
     //initialization
@@ -15,8 +17,8 @@ export default function Todo() {
         initTodo = JSON.parse(localStorage.getItem("todos"))
     }
 
+    const [todos, dispatch] = useReducer(todoReducer, initTodo);
     //states
-    const [todos, setTodos] = useState(initTodo);
     const [results, setResults] = useState("");
     const [editTodo, setEditTodo] = useState(false);
     const [addTodo, setAddTodo] = useState(false);
@@ -24,9 +26,10 @@ export default function Todo() {
     const [confirm, setConfirm] = useState(false);
     const [search, setSearch] = useState("");
 
+
     const handleAddTodo = (title, desc, date, time) => {
         const exists = todos.some((todo) =>
-            todo.title === title);
+            todo.title.toLowerCase() === title.toLowerCase());
         if (exists) {
             setAlert({
                 type: 'warning',
@@ -35,26 +38,22 @@ export default function Todo() {
             });
             return;
         }
-        let sno;
-        if (todos.length === 0) {
-            sno = 1;
-        }
-        else {
-            sno = todos[todos.length - 1].sno + 1;
-        }
-        const todo = {
-            sno: sno,
-            title: title.trim(),
-            desc: desc.trim(),
-            added_at: new Date(),
-            schedule: {
-                date: date,
-                time: time
-            },
-            notified: false,
-            completed: false
-        };
-        setTodos([...todos, todo])
+
+        dispatch({
+            type: "ADD",
+            payload: {
+                sno: crypto.randomUUID?.()?? Date.now().toString(),
+                title: title,
+                desc: desc,
+                added_at: new Date(),
+                schedule: {
+                    date: date,
+                    time: time
+                },
+                notified: false,
+                completed: false
+            }
+        });
         setAddTodo(false)
         setAlert({
             type: 'success',
@@ -63,24 +62,19 @@ export default function Todo() {
         });
     }
     const handleUpdateTodo = (sno, newTitle, newDesc, newDate, newTime) => {
-        setTodos((todos) => {
-            return todos.map((todo) => {
-                return todo.sno === sno ?
-                    {
-                        ...todo,
-                        sno: sno,
-                        title: newTitle.trim(),
-                        desc: newDesc.trim(),
-                        schedule: {
-                            date: newDate,
-                            time: newTime
-                        },
-                        notified: false
-
-                    }
-                    : todo
-            })
+        dispatch({
+            type: "EDIT",
+            payload: {
+                sno: sno,
+                title: newTitle,
+                desc: newDesc,
+                schedule: {
+                    date: newDate,
+                    time: newTime
+                }
+            }
         })
+
         setEditTodo(false)
         setAlert({
             type: 'success',
@@ -89,9 +83,10 @@ export default function Todo() {
         });
     }
     const handleDeleteTodo = (todo) => {
-        setTodos(todos.filter((e) => {
-            return e !== todo
-        }));
+        dispatch({
+            type: "DELETE",
+            payload: todo.sno
+        })
         setConfirm(false);
         setAlert({
             type: 'success',
@@ -99,15 +94,13 @@ export default function Todo() {
             icon: "check-circle-fill"
         });
     }
-    const handleTodoStatus = (newTodo) => {
-        setTodos((todos) =>
-            todos.map((todo) =>
-                todo.sno === newTodo.sno
-                    ? { ...todo, completed: !todo.completed }
-                    : todo
-            )
-        );
-        if (!newTodo.completed) {
+    const handleTodoStatus = (doneTodo) => {
+        dispatch({
+            type: "STATUS",
+            payload: doneTodo.sno
+        })
+
+        if (!doneTodo.completed) {
             setAlert({
                 type: 'success',
                 message: 'You Completed The Todo Task!',
@@ -115,8 +108,6 @@ export default function Todo() {
             });
         }
     };
-
-
 
     //serch results useEffect() function
     useEffect(() => {
@@ -191,13 +182,11 @@ export default function Todo() {
                                 icon: "/favicon.png"
                             });
 
-                            setTodos((currentTodos) =>
-                                currentTodos.map((currentTodo) =>
-                                    currentTodo.sno === todo.sno
-                                        ? { ...currentTodo, notified: true }
-                                        : currentTodo
-                                )
-                            );
+                            dispatch({
+                                type: "NOTIFY",
+                                payload: todo.sno
+                            })
+
                         } catch (error) {
                             console.log("Notification failed:", error);
                         }
@@ -224,6 +213,7 @@ export default function Todo() {
 
     return (
         <>
+            <PageTitle title={"App | Task Manager"} />
             <Header
                 search={search}
                 onSearch={setSearch}

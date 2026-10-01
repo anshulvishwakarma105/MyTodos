@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react'
-import { getCurrentDate, getCurrentTime } from './Calculation';
+import { getCurrentDate, getCurrentTime } from '../Calculation';
 
 export default function AddTodo({ onSave, onClose, onAlert }) {
 
@@ -23,7 +23,7 @@ export default function AddTodo({ onSave, onClose, onAlert }) {
             })
             return
         }
-        onSave(title, desc, date, time)
+        onSave(title.trim(), desc.trim(), date, time)
         setTitle("")
         setDesc("")
     }

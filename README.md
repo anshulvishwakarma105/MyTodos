@@ -1,6 +1,6 @@
 ## Introduction
 
-A simple, user-friendly Todo App that supports CRUD (Create, Read, Update, and Delete) operations and stores data in the browser's localStorage. It features a clean and user-friendly UI/UX.
+A simple, user-friendly Todos App that supports CRUD (Create, Read, Update, and Delete) operations and stores data in the browser's localStorage. It features a clean and user-friendly UI/UX.
 
 * It does not store any data in the cloud.
 
@@ -17,6 +17,11 @@ Git (*optional)
 
 GitHub (*optional)
 
+## Used React Hooks
+
+>> useState
+>> useEffect
+>> useReducer
 
 ## Setup or Cloning For the repo
 
