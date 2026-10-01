@@ -12,8 +12,8 @@ function Navbar() {
     }]
   return (
     <nav className="navbar navbar-expand-md bg-primary" data-bs-theme="dark">
-      <div className="container-fluid">
-        <NavLink to="/" className="navbar-brand fw-bold align-middle ms-5" >
+      <div className="container-fluid px-md-5">
+        <NavLink to="/" className="navbar-brand fw-bold align-middle" >
           <span> Todos App</span></NavLink>
         <button
           className="navbar-toggler"
@@ -44,7 +44,7 @@ function Navbar() {
             ></button>
           </div>
           <div className="offcanvas-body">
-            <ul className="navbar-nav ms-auto me-5">
+            <ul className="navbar-nav ms-auto ">
               {navlinks.map((navlink, index) => (
                 <li key={index} className="nav-item px-2" >
                   <NavLink

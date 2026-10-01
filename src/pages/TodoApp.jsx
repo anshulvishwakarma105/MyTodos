@@ -117,6 +117,7 @@ export default function Todo() {
     };
 
 
+
     //serch results useEffect() function
     useEffect(() => {
         const results = todos.filter(todo =>

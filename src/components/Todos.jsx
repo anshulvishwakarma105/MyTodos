@@ -1,8 +1,17 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import TodoItem from './TodoItem'
 
-export default function Todos({ todos, onEdit, onDone, onDelete,onConfirm, onSearch }) {
-    const [operation, setOperation] = useState(false)
+export default function Todos({ todos, onEdit, onDone, onDelete, onConfirm, onSearch }) {
+    const [operation, setOperation] = useState(false);
+    useEffect(() => {
+        const handleClick = () => {
+            setOperation(false);
+        };
+        document.addEventListener("click", handleClick);
+        return () => {
+            document.removeEventListener("click", handleClick);
+        };
+    }, []);
 
     const displayTodos = onSearch ? onSearch : todos;
 
@@ -23,8 +32,8 @@ export default function Todos({ todos, onEdit, onDone, onDelete,onConfirm, onSea
                 </span>
             </div>
 
-            {displayTodos.length ? (
-                displayTodos.map((todo, index) => (
+            {displayTodos.length && !displayTodos.completed ? (
+                displayTodos.filter(todo => !todo.completed).map((todo, index) => (
                     <TodoItem
                         key={todo.sno}
                         index={index}
@@ -43,6 +52,35 @@ export default function Todos({ todos, onEdit, onDone, onDelete,onConfirm, onSea
                     <span>No Todo to Display</span>
                 </div>
             )}
+            {displayTodos.filter(todo => todo.completed).length?
+                (<div class="accordion" id="accordionExample">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                Completed Todos List
+                            </button>
+                        </h2>
+                        <div id="collapseOne" class="accordion-collapse collapse " data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                {displayTodos.filter(todo => todo.completed).map((todo, index) => (
+                                    <TodoItem
+                                        key={todo.sno}
+                                        index={index}
+                                        todo={todo}
+                                        onEdit={onEdit}
+                                        onDone={onDone}
+                                        onDelete={onDelete}
+                                        onConfirm={onConfirm}
+                                        operation={operation}
+                                        onOperation={setOperation}
+                                    />
+                                ))
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>)
+                : ""}
         </div>
     )
 }

@@ -12,9 +12,9 @@ function TodoItemOperations({ todo, onDone, onEdit, onConfirm, onOperation }) {
             }}>
             <div
                 className={`btn btn-outline-${todo.completed ? "success" : "warning"} d-flex justify-content-evenly gap-2`}
-                onClick={() => {
-                    onDone(todo)
-                    // onOperation(false)
+                onClick={(e) => {
+                    e.stopPropagation();
+                    onDone(todo);
                 }}
             >
                 {todo.completed ?
@@ -62,9 +62,9 @@ function Alert({ alert, onAlert }) {
                 zIndex: "3000"
             }}>
             <div className={`alert alert-${alert.type} d-flex align-items-center justify-content-center `} role="alert"
-            style={{
-                minWidth:"300px"
-            }}>
+                style={{
+                    minWidth: "300px"
+                }}>
                 <i className={`bi bi-${alert.icon} me-2`}></i>
                 <div>
                     {alert.message}
