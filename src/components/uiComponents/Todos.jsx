@@ -15,8 +15,8 @@ export default function Todos({ todos, onEdit, onDone, onConfirm, onSearch }) {
     }, [])
 
     const displayTodos = onSearch ? onSearch : todos
-    const pendingTodos = displayTodos.filter(todo => !todo.completed);
-    const completedTodos = displayTodos.filter(todo => todo.completed);
+    const pendingTodos = displayTodos.filter(todo => !todo.completed)
+    const completedTodos = displayTodos.filter(todo => todo.completed)
 
     return (
         <div className="container pb-3 my-2" style={{ maxWidth: "800px" }}>
@@ -30,63 +30,72 @@ export default function Todos({ todos, onEdit, onDone, onConfirm, onSearch }) {
                 </span>
             </div>
             <hr />
-            { pendingTodos.length? (
-                pendingTodos.map((todo, index) => (
-                    <TodoItem
-                        key={todo.sno}
-                        index={index}
-                        todo={todo}
-                        onEdit={onEdit}
-                        onDone={onDone}
-                        onConfirm={onConfirm}
-                        operation={operation}
-                        onOperation={setOperation}
-                    />
-                ))
-            ) : (
-                <div className="alert alert-secondary d-flex align-items-center gap-2 mb-0">
-                    <i className="bi bi-inbox fs-5"></i>
-                    <span>No Todo to Display</span>
-                </div>
-            )}
-            {completedTodos.length ? (
-                <div className="accordion" id="accordionExample" style={{ paddingBottom: "30px" }}>
-                    <div className="accordion-item">
-                        <h2 className="accordion-header">
-                            <button
-                                className="accordion-button"
-                                type="button"
-                                data-bs-toggle="collapse"
-                                data-bs-target="#collapseOne"
-                                aria-expanded="true"
-                                aria-controls="collapseOne"
-                            >
-                                Completed Todos List
-                            </button>
-                        </h2>
-                        <div
-                            id="collapseOne"
-                            className="accordion-collapse collapse"
-                            data-bs-parent="#accordionExample"
-                        >
-                            <div className="accordion-body">
-                                {completedTodos.map((todo, index) => (
-                                    <TodoItem
-                                        key={todo.sno}
-                                        index={index}
-                                        todo={todo}
-                                        onEdit={onEdit}
-                                        onDone={onDone}
-                                        onConfirm={onConfirm}
-                                        operation={operation}
-                                        onOperation={setOperation}
-                                    />
-                                ))}
+            {displayTodos.length > 0 ? (
+                <>
+                    {pendingTodos.length ? (
+                        pendingTodos.map((todo, index) => (
+                            <TodoItem
+                                key={todo.sno}
+                                index={index}
+                                todo={todo}
+                                onEdit={onEdit}
+                                onDone={onDone}
+                                onConfirm={onConfirm}
+                                operation={operation}
+                                onOperation={setOperation}
+                            />
+                        ))
+                    ) : (
+                        <div className="alert alert-secondary mb-2 fst-italic text-muted">
+                            <i className="bi bi-ban fs-5 me-2"></i>
+                            <span>No Pending Todo</span>
+                        </div>
+                    )}
+                    {completedTodos.length ? (
+                        <div className="accordion" id="accordionExample" style={{ paddingBottom: "30px" }}>
+                            <div className="accordion-item">
+                                <h2 className="accordion-header">
+                                    <button
+                                        className="accordion-button"
+                                        type="button"
+                                        data-bs-toggle="collapse"
+                                        data-bs-target="#collapseOne"
+                                        aria-expanded="true"
+                                        aria-controls="collapseOne"
+                                    >
+                                        Completed Todos List
+                                    </button>
+                                </h2>
+                                <div
+                                    id="collapseOne"
+                                    className="accordion-collapse collapse"
+                                    data-bs-parent="#accordionExample"
+                                >
+                                    <div className="accordion-body">
+                                        {completedTodos.map((todo, index) => (
+                                            <TodoItem
+                                                key={todo.sno}
+                                                index={index}
+                                                todo={todo}
+                                                onEdit={onEdit}
+                                                onDone={onDone}
+                                                onConfirm={onConfirm}
+                                                operation={operation}
+                                                onOperation={setOperation}
+                                            />
+                                        ))}
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    ) : null}
+                </>
+            ) : (
+                <div className="alert alert-secondary mb-2 fst-italic text-muted">
+                    <i className="bi bi-ban fs-5 me-2"></i>
+                    <span>No Todos To Display</span>
                 </div>
-            ) : null}
+            )}
         </div>
     )
 }
